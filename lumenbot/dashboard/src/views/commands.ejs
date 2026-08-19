@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Custom Commands — <%= guild.name || guild.guild_id %></title>
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --card: #12141a;
+      --border: rgba(255,255,255,0.08);
+      --accent: #c9b896;
+      --text: #e8e6e3;
+      --muted: #8b8d97;
+      --blurple: #5865F2;
+      --danger: #ed4245;
+      --success: #57F287;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 2rem;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    h1 { font-size: 1.5rem; margin: 0.5rem 0 0.25rem; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .alert { padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; }
+    .alert-ok { background: rgba(87,242,135,0.12); color: var(--success); }
+    .alert-err { background: rgba(237,66,69,0.12); color: var(--danger); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .card h2 { font-size: 1.05rem; margin: 0 0 1rem; color: var(--accent); }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin: 0.75rem 0 0.35rem; }
+    input[type="text"] {
+      width: 100%;
+      max-width: 280px;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0a0b0f;
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0a0b0f;
+      color: #d4d4d4;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      resize: vertical;
+    }
+    button, .btn {
+      display: inline-block;
+      border: none;
+      border-radius: 8px;
+      padding: 0.55rem 1.1rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 0.75rem;
+      margin-right: 0.4rem;
+    }
+    .btn-primary { background: var(--blurple); color: #fff; }
+    .btn-primary:hover { background: #4752c4; }
+    .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+    .btn-danger:hover { background: rgba(237,66,69,0.15); }
+    .cmd-row {
+      border-top: 1px solid var(--border);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+    .cmd-row:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+    .cmd-name { font-weight: 600; font-family: monospace; color: var(--accent); }
+    .badge {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(201,184,150,0.15);
+      color: var(--accent);
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      line-height: 1.4;
+    }
+    pre.example {
+      background: #0a0b0f;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.78rem;
+      overflow-x: auto;
+      color: #a8b0c0;
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="/dashboard/<%= guild.guild_id %>">← Server settings</a>
+  <h1>Custom Commands</h1>
+  <p class="sub"><%= guild.name || guild.guild_id %> · Trigger in Discord with <code>!name</code></p>
+
+  <% if (saved) { %><div class="alert alert-ok">Saved.</div><% } %>
+  <% if (error) { %><div class="alert alert-err"><%= error %></div><% } %>
+
+  <div class="card">
+    <h2>New command</h2>
+    <form method="POST" action="/dashboard/<%= guild.guild_id %>/commands/create">
+      <label>Command name (without !)</label>
+      <input type="text" name="name" placeholder="hello" required maxlength="32" pattern="[a-zA-Z0-9_-]+">
+
+      <label>Code / response</label>
+      <textarea name="response" required placeholder="Hey {user.mention}!"></textarea>
+
+      <button type="submit" class="btn-primary">Create command</button>
+    </form>
+
+    <p class="hint"><strong>Modes</strong></p>
+    <pre class="example">Plain text:
+Hey {user.mention} on {server}!
+
+Embed:
+EMBED|{"title":"Hi {user}","description":"Welcome","color":"#c9b896"}
+
+JavaScript (must return string or embed object):
+CODE|return "Hello " + user.mention + "! Args: " + args.join(" ");
+
+CODE|return { title: server.name, description: "Members: " + server.members, color: "#5865F2" };</pre>
+    <p class="hint">
+      Placeholders: <code>{user}</code> <code>{user.mention}</code> <code>{user.tag}</code> <code>{server}</code>
+      <code>{channel}</code> <code>{args}</code> <code>{args1}</code> <code>{random:a|b|c}</code><br>
+      In CODE: <code>user</code>, <code>server</code>, <code>channel</code>, <code>args</code>, <code>Math</code>, <code>JSON</code>
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Existing commands (<%= commands.length %>)</h2>
+    <% if (!commands.length) { %>
+      <p class="hint">No commands yet. Create one above.</p>
+    <% } %>
+    <% commands.forEach(function(cmd) {
+      var mode = 'text';
+      var r = (cmd.response || '').trim();
+      if (r.indexOf('CODE|') === 0) mode = 'code';
+      else if (r.indexOf('EMBED|') === 0) mode = 'embed';
+    %>
+      <div class="cmd-row">
+        <div>
+          <span class="cmd-name">!<%= cmd.name %></span>
+          <span class="badge"><%= mode %></span>
+        </div>
+        <form method="POST" action="/dashboard/<%= guild.guild_id %>/commands/update">
+          <input type="hidden" name="id" value="<%= cmd.id %>">
+          <textarea name="response" required><%= cmd.response %></textarea>
+          <button type="submit" class="btn-primary">Save</button>
+        </form>
+        <form method="POST" action="/dashboard/<%= guild.guild_id %>/commands/delete" style="display:inline" onsubmit="return confirm('Delete !<%= cmd.name %>?');">
+          <input type="hidden" name="id" value="<%= cmd.id %>">
+          <button type="submit" class="btn-danger">Delete</button>
+        </form>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>
