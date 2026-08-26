@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lumen Bot — We love the moon</title>
+  <style>
+    :root {
+      --bg: #0a0b0f;
+      --card: #12141a;
+      --accent: #c9b896;
+      --text: #e8e6e3;
+      --muted: #8b8d97;
+      --blurple: #5865F2;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(201,184,150,0.15), transparent),
+        var(--bg);
+    }
+    .logo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 60px rgba(201,184,150,0.25);
+      margin-bottom: 1.5rem;
+      border: 2px solid rgba(201,184,150,0.3);
+    }
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+    }
+    .tagline {
+      color: var(--muted);
+      font-size: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+    .btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.75rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--blurple);
+      color: #fff;
+      box-shadow: 0 4px 24px rgba(88,101,242,0.4);
+    }
+    .btn-primary:hover { box-shadow: 0 6px 32px rgba(88,101,242,0.55); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .features {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .feature h3 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .feature p { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="logo" style="width:160px;height:160px;border-radius:50%;overflow:hidden;margin:0 auto 1.5rem;border:2px solid rgba(201,184,150,0.3);box-shadow:0 0 60px rgba(201,184,150,0.25);background:#0a0b0f;display:flex;align-items:center;justify-content:center">
+      <img src="/logo.jpg" alt="Lumen Bot" style="width:100%;height:100%;object-fit:cover" onerror="this.parentNode.innerHTML='<span style=font-size:4rem>🌙</span>'">
+    </div>
+    <h1>Lumen</h1>
+    <p class="tagline">We love the moon.</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="<%= inviteUrl %>" target="_blank" rel="noopener">
+        Add to Server
+      </a>
+      <a class="btn btn-secondary" href="/login">Dashboard</a>
+      <a class="btn btn-secondary" href="/docs">Documentation</a>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature">
+      <h3>Moderation</h3>
+      <p>Kick, ban, mute, warn, softban, infractions, and timed punishments.</p>
+    </div>
+    <div class="feature">
+      <h3>Automod</h3>
+      <p>Filter invites, bad words, and links. Configurable actions including warn, mute, kick, and ban.</p>
+    </div>
+    <div class="feature">
+      <h3>Verification</h3>
+      <p>Roblox verification with prompts, roles, and nickname sync.</p>
+    </div>
+    <div class="feature">
+      <h3>Modmail</h3>
+      <p>Private tickets from DMs with staff relay and ban controls.</p>
+    </div>
+    <div class="feature">
+      <h3>Custom Commands</h3>
+      <p>Create your own <code>!commands</code> with simple responses.</p>
+    </div>
+    <div class="feature">
+      <h3>Reaction Roles</h3>
+      <p>Classic reactions and button-based role menus.</p>
+    </div>
+  </section>
+
+  <footer>
+    Lumen Bot · We love the moon.
+  </footer>
+</body>
+</html>
